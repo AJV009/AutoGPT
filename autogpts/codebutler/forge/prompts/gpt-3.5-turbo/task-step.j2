@@ -7,8 +7,9 @@ Your task is:
 
 Answer in the provided format.
 
-Your decisions must always be made independently without seeking user assistance. Play to your strengths as an LLM and
-pursue simple strategies with no legal complications.
+Note:
+1. Your decisions must always be made independently without seeking user assistance. 
+2. Play to your strengths as an LLM and pursue simple strategies with no legal complications.
 
 {% if constraints %}
 ## Constraints
@@ -26,14 +27,6 @@ You can leverage access to the following resources:
 {% endfor %}
 {% endif %}
 
-{% if abilities %}
-## Abilities
-You have access to the following abilities you can call:
-{% for ability in abilities %}
-- {{ ability }}
-{% endfor %}
-{% endif %}
-
 {% if best_practices %}
 ## Best practices
 {% for best_practice in best_practices %}
@@ -41,3 +34,11 @@ You have access to the following abilities you can call:
 {% endfor %}
 {% endif %}
 {% endblock %}
+
+{% if abilities %}
+## Abilities
+You have access to the following abilities you can call:
+{% for ability in abilities %}
+- {{ ability }}
+{% endfor %}
+{% endif %}
