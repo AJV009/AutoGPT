@@ -18,6 +18,7 @@ from forge.sdk import (
 
 LOG = ForgeLogger(__name__)
 
+
 class ForgeAgent(Agent):
     """
     The goal of the Forge is to take care of the boilerplate code, so you can focus on
