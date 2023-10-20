@@ -214,7 +214,7 @@ def agent():
 @agent.command()
 @click.argument("agent_name")
 def create(agent_name):
-    """Create's a new agent with the agent name provieded"""
+    """Create's a new agent with the agent name provided"""
     import os
     import re
     import shutil
@@ -301,14 +301,22 @@ def stop():
     import subprocess
 
     try:
-        pid = int(subprocess.check_output(["lsof", "-t", "-i", ":8000"]))
-        os.kill(pid, signal.SIGTERM)
+        pids = subprocess.check_output(["lsof", "-t", "-i", ":8000"]).split()
+        if isinstance(pids, int):
+            os.kill(int(pids), signal.SIGTERM)
+        else:
+            for pid in pids:
+                os.kill(int(pid), signal.SIGTERM)
     except subprocess.CalledProcessError:
         click.echo("No process is running on port 8000")
 
     try:
-        pid = int(subprocess.check_output(["lsof", "-t", "-i", ":8080"]))
-        os.kill(pid, signal.SIGTERM)
+        pids = int(subprocess.check_output(["lsof", "-t", "-i", ":8080"]))
+        if isinstance(pids, int):
+            os.kill(int(pids), signal.SIGTERM)
+        else:
+            for pid in pids:
+                os.kill(int(pid), signal.SIGTERM)
     except subprocess.CalledProcessError:
         click.echo("No process is running on port 8080")
 

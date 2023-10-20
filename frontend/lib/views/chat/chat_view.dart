@@ -1,6 +1,5 @@
 import 'package:auto_gpt_flutter_client/models/message_type.dart';
 import 'package:auto_gpt_flutter_client/viewmodels/settings_viewmodel.dart';
-import 'package:auto_gpt_flutter_client/viewmodels/skill_tree_viewmodel.dart';
 import 'package:auto_gpt_flutter_client/viewmodels/task_queue_viewmodel.dart';
 import 'package:auto_gpt_flutter_client/viewmodels/task_viewmodel.dart';
 import 'package:auto_gpt_flutter_client/views/chat/agent_message_tile.dart';
@@ -145,6 +144,20 @@ class _ChatViewState extends State<ChatView> {
                             "linear-gradient(to right, #dc1c13, #dc1c13)",
                         textColor: Colors.white,
                         fontSize: 16.0);
+                  } else if (response is http.Response &&
+                      response.statusCode >= 500 &&
+                      response.statusCode < 600) {
+                    Fluttertoast.showToast(
+                        msg: "500 error: Something went wrong",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 5,
+                        backgroundColor: Colors.red,
+                        webPosition: "center",
+                        webBgColor:
+                            "linear-gradient(to right, #dc1c13, #dc1c13)",
+                        textColor: Colors.white,
+                        fontSize: 16.0);
                   }
                 }
               },
@@ -153,6 +166,7 @@ class _ChatViewState extends State<ChatView> {
                     !widget.viewModel.isContinuousMode;
               },
               isContinuousMode: widget.viewModel.isContinuousMode,
+              viewModel: widget.viewModel,
             ),
           ),
         ],
