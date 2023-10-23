@@ -399,18 +399,3 @@ class ForgeAgent(Agent):
         )
         LOG.info(f"agent.py - create_step - Created step {created_step}")
         return created_step
-
-
-# Agent Profiler
-    # Find Head Profile [Manages the Agents]
-        # Find Child Profile(s)
-        # Create the Plan
-            # Create the Steps
-        # Attach Profiles to Tasks
-            # Setup Task Executioner [Multiple Agents wil be triggered here with different Assigned Tasks]
-                # Prep Agent-Task-ability Prompting
-        # [PLAN Manager]
-            # TODO: Manage the Task sync
-# Critique System
-    # Verify all the prompt ins and outs [RLAIF] (Reinforcement learning from AI feedback)
-    # Take multiple outputs from the system and Find the most suitable output based on the rules

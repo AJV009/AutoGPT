@@ -23,3 +23,17 @@ class ProfileGenerator:
         Initialize the profile generator with the task to be performed.
         """
         self.task = task
+    
+    def master_profile(self):
+        """
+        Master Profile:
+        
+        IN:
+        - Task
+        
+        OUT:
+        - Main Planning Profile (CTO, Strategist, etc.)
+        - Better Defined Task
+        - A Plan
+        """
+        pass
