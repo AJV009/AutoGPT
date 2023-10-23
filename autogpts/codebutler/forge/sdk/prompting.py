@@ -43,6 +43,7 @@ class PromptEngine:
             model (str): The model to use for loading prompts.
             debug_enabled (bool): Enable or disable debug logging.
         """
+        self.prompts_path = model
         self.model = model
         self.debug_enabled = debug_enabled
         if self.debug_enabled:
@@ -53,6 +54,9 @@ class PromptEngine:
             models_dir = os.path.abspath(
                 os.path.join(os.path.dirname(__file__), "../prompts")
             )
+
+            self.prompts_abs_path = models_dir + "/" + model
+
             model_names = [
                 os.path.basename(os.path.normpath(d))
                 for d in glob.glob(os.path.join(models_dir, "*/"))
@@ -93,6 +97,27 @@ class PromptEngine:
             LOG.error(f"Error finding closest match: {e}")
             raise
 
+    # def load_prompt(self, template: str, **kwargs) -> str:
+    #     """
+    #     Load and populate the specified template.
+
+    #     Args:
+    #         template (str): The name of the template to load.
+    #         **kwargs: The arguments to populate the template with.
+
+    #     Returns:
+    #         str: The populated template.
+    #     """
+    #     try:
+    #         template = os.path.join(self.model, template)
+    #         LOG.debug(f"Loading template: {template}")
+    #         template = self.env.get_template(f"{template}.j2")
+    #         LOG.debug(f"Rendering template: {template} with args: {kwargs}")
+    #         return template.render(**kwargs)
+    #     except Exception as e:
+    #         LOG.error(f"Error loading or rendering template: {e}")
+    #         raise
+
     def load_prompt(self, template: str, **kwargs) -> str:
         """
         Load and populate the specified template.
@@ -105,13 +130,47 @@ class PromptEngine:
             str: The populated template.
         """
         try:
-            template = os.path.join(self.model, template)
-            if self.debug_enabled:
-                LOG.debug(f"Loading template: {template}")
-            template = self.env.get_template(f"{template}.j2")
-            if self.debug_enabled:
-                LOG.debug(f"Rendering template: {template} with args: {kwargs}")
+            template = os.path.join(self.prompts_path, template)
+            template = self.env.get_template(template)
             return template.render(**kwargs)
         except Exception as e:
             LOG.error(f"Error loading or rendering template: {e}")
             raise
+
+    def list_prompts(self) -> List[str]:
+        """
+        List the available prompts 
+        """
+        LOG.debug(f"Listing prompts in {self.prompts_abs_path}")
+        try:
+            # get a list of all the files in the 'self.prompts_path' directory
+            available_prompts = os.listdir(self.prompts_abs_path)
+            return available_prompts
+        except Exception as e:
+            LOG.error(f"Error listing prompts: {e}")
+            raise
+    
+    def singular_message_array_generator(self, **task_kwargs) -> List[any]:
+        """
+        Generate a list of lists of messages, given unique kwargs and the main model path.
+        """
+        messages = []
+        available_templates = self.list_prompts()
+        for template in available_templates:
+            self.load_prompt(template, **task_kwargs)
+            if "system" in template:
+                messages.append({
+                    "role": "system",
+                    "content": self.load_prompt(template, **task_kwargs)
+                })
+            elif "assistant" in template:
+                messages.append({
+                    "role": "assistant",
+                    "content": self.load_prompt(template, **task_kwargs)
+                })
+            elif "user" in template:
+                messages.append({
+                    "role": "user",
+                    "content": self.load_prompt(template, **task_kwargs)
+                })
+        return messages

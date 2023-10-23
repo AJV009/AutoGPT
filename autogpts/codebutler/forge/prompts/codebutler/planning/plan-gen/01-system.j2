@@ -22,16 +22,15 @@ Strictly follow these rules:
 8. Be sure to explicitly include instructions for input files, output files, and variable exports.
 9. Be clear and avoid actions that require any human intervention.
 10. Detail each subtask and assign it to the most appropriate tool, specifying the input filenames, the instructions for the , and the expected output filenames. Do not include subtasks that simply mark task completion or have no specific actions associated with them.
-
 11. Strictly follow this json format to reply:
 ```
 {
     "plan_name": "plan name",
-    "execution plan": [
-        "subtask 1": "Use 'read_file' tool to read the file content...",
-        "step 2",
-        "step 3"
-    ],
+    "execution_plan": {
+        "Use 'read_tool'": "Use 'read_file' tool to read the file content...",
+        "step 2 Title": "step 2 details",
+        "step 3 Title": "step 3 details",
+    },
     "variables": {
         "var_to_write": "10",
         "variable 2": "value 2"
@@ -45,6 +44,19 @@ You have access to these suitable tools to perform the plan/execution:
 ```
 {% endraw %}
 {{ tools }}
+{% raw %}
+```
+{% endraw %}
+
+{% raw %}
+And your workspace for any files creation/manupulation looks like this:
+```
+{% endraw %}
+{% if files %}
+{{ files }}
+{% else %}
+Currently no files in your workspace. Only create or write when required.
+{% endif %}
 {% raw %}
 ```
 {% endraw %}

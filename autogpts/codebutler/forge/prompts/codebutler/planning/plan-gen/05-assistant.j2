@@ -1,6 +1,20 @@
 {% raw %}
 {
-    "role": "Data Analyst",
-    "description": "You are a Data Analyst and you are perfect for this task. Your expertise in handling, organizing, and analyzing financial data makes you the suitable fit. You know exactly where to look for financial data of corporate entities. Your understanding of US financial notation and ability to neatly organize data in a readable format is exactly what's required for this task."
+    "plan_name": "Building Minesweeper Game",
+    "execution_plan": {
+        "Code main class": "Use 'write_python_code' tool to create the main 'Minesweeper' class implementing abstract class 'AbstractMinesweeper'. Define all required methods with their respective parameters and ensure they follow the contract as mentioned.",
+        "Code game grid": "Use 'write_python_code' tool to build the 'create_game' method. Initialize the game with a 10x10 grid and place 10 random mines on the grid. Return game id.",
+        "Code game cell logic": "Use 'write_python_code' tool to build the 'create_cell_selection' method. Handle cell selection. If the selected cell is a mine, return response 'mine' and end game. If the cell has adjacent mines, return response 'safe' and the number of adjacent mines. If the cell has no adjacent mines, recursively reveal the adjacent cells and return response 'cleared'.",
+        "Code game winning condition": "Use 'write_python_code' tool to build the 'get_game_status' method. Return the current status of the game, whether it is over and if the player has won.",
+        "Ensure game aspects": "Use 'write_python_code' tool to build the 'get_game' method. Return the current state of the game. Ensure that the mines, board, and turns details are returned correctly.",
+        "Code game deletion": "Use 'write_python_code' tool to build the 'delete_game' method. Delete a game using game id.",
+        "Test the Game Code": "After writing each method, run 'pytest' using the 'execute_python_tests' tool to ensure that the implementation is working as expected. This will also ensure that the game behaves as expected both in ideal conditions and incorrect uses. Repeat the testing after each method's implementation until all tests pass."
+    },
+    "variables": {
+        "grid_size": "10",
+        "mine_count": "10",
+        "test_tool": "pytest",
+        "python_file": "minesweeper.py"
+    }
 }
 {% endraw %}

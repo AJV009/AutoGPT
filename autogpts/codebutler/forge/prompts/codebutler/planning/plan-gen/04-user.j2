@@ -4,7 +4,122 @@ Perfect, now next one:
 ```
 {% endraw %}
 
-Write tesla's revenue every year since its creation into a .txt file. Use the US notation, with a precision rounded to the nearest million dollars (for instance, $31,578 billion).
+"Build a Minesweeper game
+
+Specifications:
+
+Overview: Minesweeper is a single-player puzzle game where the player clears a rectangular board containing hidden "mines" without detonating any of them, with help from clues about the number of neighboring mines in each field.
+
+The Grid: The game is played on a grid of squares. The grid size can vary, but for simplicity, we'll use a 10x10 grid in this instance.
+
+Mines: The board has randomly placed mines that the player must avoid.
+
+Setup:
+
+At the start of the game, the computer places mines on the grid. This setup is hidden from the player. The number of mines can vary, but for simplicity, we'll assume there are 10 mines.
+The game begins with the player making the first click on the grid.
+Taking Turns:
+
+On a player's turn, they select a square on the grid. If the square is a mine, the game ends. Otherwise, the square reveals the number of adjacent squares (typically, out of the possible eight) that contain mines.
+If the player selects a square with no adjacent mines, the adjacent squares are automatically revealed, and so on.
+Objective: The goal is to clear all the safe squares while avoiding the mines.
+
+End of the Game: The game ends when a mine is detonated or all safe squares are cleared. The player wins if all safe squares are cleared without detonating a mine.
+
+Technical details:
+In your root folder, you will find an abstract class that defines the public interface of the Minesweeper class you will have to build:
+```
+from abc import ABC, abstractmethod
+from typing import Optional
+
+from pydantic import BaseModel, validator
+
+
+# Models for the request and response payloads
+class CellSelection(BaseModel):
+    cell: dict  # {"row": int, "column": int}
+
+    @validator("cell")
+    def validate_cell(cls, cell):
+        row, column = cell.get("row"), cell.get("column")
+
+        if not (1 <= row <= 10):
+            raise ValueError("Row must be between 1 and 10 inclusive.")
+
+        if not (1 <= column <= 10):
+            raise ValueError("Column must be between 1 and 10 inclusive.")
+
+        return cell
+
+
+class CellSelectionResponse(BaseModel):
+    result: str  # "safe", "mine", or "cleared"
+    adjacent_mines: Optional[int]  # This would be None if the result is "mine"
+
+
+class GameStatus(BaseModel):
+    is_game_over: bool
+    is_winner: Optional[bool]
+
+
+from typing import List
+
+
+class Game(BaseModel):
+    game_id: str
+    board: dict  # This could represent the state of the game board, you might need to flesh this out further
+    mines: List[dict]  # List of mine locations for this game
+    turns: List[CellSelection]  # List of turns that have been taken
+
+
+class AbstractMinesweeper(ABC):
+
+    @abstractmethod
+    def create_cell_selection(self, game_id: str, selection: CellSelection) -> CellSelectionResponse:
+        """
+        Select a cell on the grid.
+        """
+        pass
+
+    @abstractmethod
+    def get_game_status(self, game_id: str) -> GameStatus:
+        """
+        Check if the game is over and if the player has won.
+        """
+        pass
+
+    @abstractmethod
+    def get_game(self, game_id: str) -> Game:
+        """
+        Retrieve the state of the game.
+        """
+        pass
+
+    @abstractmethod
+    def delete_game(self, game_id: str) -> None:
+        """
+        Delete a game given its ID.
+        """
+        pass
+
+    @abstractmethod
+    def create_game(self) -> str:
+        """
+        Create a new game.
+        """
+        pass
+
+```
+At any moment you can run ```pytest``` to execute the tests.
+You have two types of test:
+- positive tests => test the minesweeper game being used in ideal conditions
+- negative tests => tests the minesweeper game behavior when used incorrectly
+
+Success criteria:
+- you will need to write a file called minesweeper.py that implements the abstract Minesweeper class.
+- this class will have to pass all the tests.
+- you're not allowed to modify any other file than the minesweeper.py. You can add other files as long as the main entry point is the Minesweeper class."
+
 
 {% raw %}
 ```
